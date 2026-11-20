@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ISO Tank Manager ERP</title>
+<style>
+:root{--bg:#f9fafb;--card:#fff;--ink:#111827;--mute:#6b7280;--line:#e5e7eb;--side:#0f172a;--blue:#2563eb;--red:#dc2626;--amb:#d97706;--grn:#16a34a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1120;--card:#162033;--ink:#f1f5f9;--mute:#94a3b8;--line:#263449;--side:#060b16}}
+:root[data-theme="dark"]{--bg:#0b1120;--card:#162033;--ink:#f1f5f9;--mute:#94a3b8;--line:#263449;--side:#060b16}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#app{display:flex;min-height:100vh}
+aside{width:240px;background:var(--side);color:#cbd5e1;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;flex:none}
+.logo{padding:16px 20px;border-bottom:1px solid #1e293b;display:flex;gap:12px;align-items:center}
+.logo i{width:38px;height:38px;border-radius:10px;background:var(--blue);display:grid;place-items:center;font-style:normal;font-size:20px}
+.logo b{display:block;color:#fff}.logo small{color:#94a3b8}
+aside nav{flex:1;padding:12px;overflow:auto}
+aside a{display:flex;justify-content:space-between;padding:9px 12px;border-radius:8px;color:#cbd5e1;text-decoration:none;font-weight:500;margin-bottom:3px}
+aside a:hover{background:#1e293b;color:#fff}aside a.on{background:var(--blue);color:#fff}
+.who{padding:12px;border-top:1px solid #1e293b}.who p{margin:0 0 8px;font-size:12px}
+.out{background:none;border:0;color:#94a3b8;cursor:pointer;font:inherit;padding:8px 4px}.out:hover{color:#f87171}
+main{flex:1;padding:28px;min-width:0}
+h1{font-size:24px;margin:0}.sub{color:var(--mute);margin:2px 0 20px}
+.hd{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:flex-start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:18px}
+.kpi small{color:var(--mute);display:block}.kpi b{font-size:28px;display:block;line-height:1.2}.kpi span{font-size:12px;color:var(--mute)}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+h2{font-size:15px;margin:0 0 12px}
+.bar{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--line)}
+.leg{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:10px;font-size:12px;color:var(--mute)}
+.leg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
+input:focus-visible,select:focus-visible,button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.btn{font:600 13px system-ui;background:var(--blue);color:#fff;border:0;border-radius:8px;padding:9px 14px;cursor:pointer}
+.btn.s{background:var(--card);color:var(--ink);border:1px solid var(--line)}.btn.d{background:var(--red)}.btn.sm{padding:5px 10px;font-size:12px}
+.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:720px}
+th{text-align:left;font-size:12px;color:var(--mute);padding:11px 14px;background:color-mix(in srgb,var(--line) 40%,var(--card));border-bottom:1px solid var(--line);white-space:nowrap}
+th.so{cursor:pointer}td{padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+tr.r{cursor:pointer}tr.r:hover td{background:color-mix(in srgb,var(--blue) 6%,transparent)}
+.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600}
+.ra{text-align:right}.red{color:var(--red);font-weight:600}.amb{color:var(--amb);font-weight:600}.mu{color:var(--mute)}
+.empty{padding:36px;text-align:center;color:var(--mute)}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);padding:22px;width:min(560px,94vw);max-height:90vh}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}.fg label{display:block;font-size:12px;color:var(--mute);font-weight:600}.fg input,.fg select,.fg textarea{width:100%;margin-top:3px}.full{grid-column:1/-1}
+.chk{display:flex;flex-wrap:wrap;gap:6px 14px}.chk label{font-weight:400;color:var(--ink)}.chk input{width:auto;margin:0 5px 0 0}
+.dr{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)}.dr span:first-child{color:var(--mute)}
+.err{color:var(--red);margin:10px 0 0;min-height:18px}.acts{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+#login{min-height:100vh;display:grid;place-items:center;background:var(--side);padding:20px}
+#login .card{width:min(380px,100%)}#login h1{color:#fff;text-align:center;font-size:24px}#login .fg{display:block}#login .fg label{margin-bottom:12px}
+@media (max-width:760px){#app{flex-direction:column}aside{width:100%;height:auto;position:static}aside nav{display:flex;flex-wrap:wrap;gap:4px;padding:8px}aside a{margin:0}.who{display:none}main{padding:16px}}
+.ro .w{display:none!important}.na .adm{display:none!important}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<dialog id="dlg"></dialog>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LOC=['24JU Plant','24 BC','Milkyway','Aroma','Vopak','Cleaning Facility','In Transit','Customer','Maintenance Depot'];
+const USED=['Operations','Supply Chain','Veolia','Total Loss'],OPS=['Trifleet','Milkyway','Aroma'];
+const DED=['Buffer/Pitstop','Drumming','NABR Decanting','Plant Operations','Total Loss','Veolia Usage','Vopak Loading/Unloading'];
+const CUR=['SGD','USD','EUR','GBP','JPY'],SYM={SGD:'S$',USD:'$',EUR:'€',GBP:'£',JPY:'¥'},FX={SGD:1,USD:.74,EUR:.68,GBP:.58,JPY:112};
+const MST=['Pending','In Progress','Completed','Failed'];
+const LC={'24JU Plant':['#dbeafe','#1d4ed8'],Vopak:['#f3e8ff','#7e22ce'],'Cleaning Facility':['#fef9c3','#a16207'],'In Transit':['#ffedd5','#c2410c'],Customer:['#e0e7ff','#4338ca'],'Maintenance Depot':['#fee2e2','#b91c1c'],'24 BC':['#ccfbf1','#0f766e'],Milkyway:['#fce7f3','#be185d'],Aroma:['#ecfccb','#4d7c0f']};
+const SCOL={Pending:['#f3f4f6','#374151'],'In Progress':['#dbeafe','#1d4ed8'],Completed:['#dcfce7','#15803d'],Failed:['#fee2e2','#b91c1c']};
+const pill=(t,[b,c])=>`<span class="pill" style="background:${b};color:${c}">${esc(t)}</span>`;
+const K={t:'iso_tank_erp_tanks',c:'iso_tank_erp_cleanings',m:'iso_tank_erp_movements',a:'iso_tank_erp_auth',s:'iso_tank_erp_seeded',u:'iso_tank_erp_users',i:'iso_tank_erp_inspections',o:'iso_tank_erp_offhired'};
+const ld=(k,f)=>{try{const r=localStorage.getItem(k);return r===null?f:JSON.parse(r)}catch(e){return f}};
+const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const uid=()=>'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c=='x'?r:r&3|8).toString(16)});
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const dOff=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().split('T')[0]};
+const days=s=>{const a=new Date();a.setHours(0,0,0,0);const b=new Date(s);b.setHours(0,0,0,0);return Math.round((b-a)/864e5)};
+const fd=s=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(s||'');return m?`${m[3]}/${m[2]}/${m[1]}`:'—'};
+const money=(n,c)=>(SYM[c]||c)+(c==='JPY'?Math.round(n).toLocaleString():n.toLocaleString(undefined,{maximumFractionDigits:2}));
+const ago=s=>{const m=Math.floor((Date.now()-new Date(s))/6e4);if(m<1)return'Just now';if(m<60)return m+' min ago';const h=Math.floor(m/60);if(h<24)return h+' hr ago';const d=Math.floor(h/24);return d+' day'+(d>1?'s':'')+' ago'};
+const dueCls=d=>d<0?'red':d<=30?'amb':'';
+const dueCell=s=>{const d=days(s);return `<span class="${dueCls(d)}">${fd(s)}</span>${d<0?' <span class="red">· overdue</span>':d<=30?` <span class="amb">· ${d}d</span>`:''}`};
+function seed(){
+  const CG=['Heptanoic Acid','Undecylenic Acid','Heptaldehyde','Esterol A','Glycerine','Clean Tank','Empty with Residue','New Water'],DR=['John Tan','Ahmad Rahman','Li Wei','Raj Kumar','Sarah Chen','Michael Lee','David Wong','Priya Singh'];
+  const t=[],c=[],m=[];
+  for(let i=0;i<18;i++){
+    const no='ISO-'+String(i+1).padStart(3,'0');
+    t.push({tankNo:no,currentLocation:pick(LOC),usedBy:pick(USED),tankOperator:pick(OPS),contractNo:'CT-2024-'+(100+i),contractExpiryDate:dOff(Math.floor(Math.random()*120)-30),currentContents:pick(CG),nextInspectionDate:dOff(Math.floor(Math.random()*60)-10),rentalRate:50+Math.floor(Math.random()*150),rentalCurrency:pick(['SGD','USD','EUR']),capacity:pick([20000,24000,25000,26000]),levelGauge:pick(['Yes','No']),dedicatedUse:[...DED].sort(()=>Math.random()-.5).slice(0,1+Math.floor(Math.random()*3)),lastUpdated:new Date(Date.now()-Math.floor(Math.random()*72e5)).toISOString()});
+    for(let k=Math.floor(Math.random()*3);k>0;k--){const d=-30-Math.floor(Math.random()*60);c.push({id:uid(),tankNo:no,dispatchDate:dOff(d),returnDate:dOff(d+5+Math.floor(Math.random()*10)),lastCargo:pick(CG),cleaningType:'Standard Wash',cleaningFacility:pick(['PetroClean SG','Vopak Cleaning','TankWash Asia']),chassisRental:20+Math.floor(Math.random()*30),chassisCurrency:'SGD',residueCheck:pick(['Pass','Fail','Pending']),status:pick(MST)})}
+    for(let k=1+Math.floor(Math.random()*3);k>0;k--){const o=-15-Math.floor(Math.random()*45),f=pick(LOC);let to=pick(LOC);while(to===f)to=pick(LOC);const st=pick(MST);m.push({id:uid(),tankNo:no,fromLocation:f,toLocation:to,scheduledDate:dOff(o),actualDate:st==='Completed'?dOff(o+1):null,status:st,driver:pick(DR),notes:''})}
+  }
+  return{t,c,m};
+}
+let D;
+(function(){let s=null;try{s=localStorage.getItem(K.s)}catch(e){}
+  if(s==='true')D={t:ld(K.t,[]),c:ld(K.c,[]),m:ld(K.m,[])};
+  else{D=seed();sv(K.t,D.t);sv(K.c,D.c);sv(K.m,D.m);try{localStorage.setItem(K.s,'true')}catch(e){}}})();
+D.i=ld(K.i,[]);D.o=ld(K.o,[]);
+const COLL={t:'tanks',c:'cleanings',m:'movements',i:'inspections',o:'offhired'};
+const sk=s=>String(s).replace(/[^A-Za-z0-9_.~:@+-]/g,'_');
+const KEY={t:x=>sk(x.tankNo),c:x=>x.id,m:x=>x.id,i:x=>x.id,o:x=>sk(x.tank.tankNo)};
+const sj=v=>JSON.stringify(v,(k,x)=>x&&typeof x==='object'&&!Array.isArray(x)?Object.keys(x).sort().reduce((a,y)=>(a[y]=x[y],a),{}):x);
+const R={t:{},c:{},m:{},i:{},o:{}},loaded={};let Q=Promise.resolve(),ready=false,DB=null,SYNCERR='';
+function push(fn,k,id){Q=Q.then(fn).catch(e=>{delete R[k][id];SYNCERR=e&&e.code==='invalid_argument'?'Your access level does not allow saving changes.':'A change could not be saved. Check your connection and try again.';render()})}
+function saveAll(){
+  if(!DB){for(const k of Object.keys(COLL))sv(K[k],D[k]);return}
+  for(const k of Object.keys(COLL)){
+    const cur={};D[k].forEach(x=>{cur[KEY[k](x)]=x});
+    for(const id in cur){const s=sj(cur[id]);if(R[k][id]!==s){R[k][id]=s;const body=JSON.parse(JSON.stringify(cur[id]));push(()=>DB.collection(COLL[k]).doc(id).set(body),k,id)}}
+    for(const id in R[k])if(!(id in cur)){delete R[k][id];push(()=>DB.collection(COLL[k]).doc(id).delete(),k,id)}
+  }
+}
+let authed=false,me=null,USERS=[];
+
+const sha=async s=>{try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('isotank:'+s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return'p:'+s}};
+let ROLE='Viewer',MYNAME='';const ME=()=>({name:MYNAME}),role=()=>ROLE,canEdit=()=>ROLE!=='Viewer',isAdm=()=>ROLE==='Admin';
+async function initUsers(){if(!USERS.length){USERS=[{username:'admin',name:'Admin User',role:'Admin',hash:await sha('admin123')}];sv(K.u,USERS)}}
+const U0={q:'',fl:'',fu:'',fo:'',sk:'tankNo',asc:true,ms:'',mf:'',mt:'',tl:'',tu:'',mform:false,err:''};
+let ui={...U0};
+const sel=(id,opts,v,ph)=>`<select id="${id}" data-f="${id}" aria-label="${esc(ph||id)}">${ph?`<option value="">${ph}</option>`:''}${opts.map(o=>`<option ${o===v?'selected':''}>${esc(o)}</option>`).join('')}</select>`;
+const bar=(o,cols)=>{const tot=Object.values(o).reduce((a,b)=>a+b,0)||1;return `<div class="bar" role="img" aria-label="distribution">${Object.entries(o).map(([k,v])=>`<div title="${esc(k)}: ${v}" style="width:${v/tot*100}%;background:${cols[k]||'#64748b'}"></div>`).join('')}</div><div class="leg">${Object.entries(o).map(([k,v])=>`<span><i style="background:${cols[k]||'#64748b'}"></i>${esc(k)}: ${v}</span>`).join('')}</div>`};
+const cnt=(a,f)=>a.reduce((o,x)=>(o[f(x)]=(o[f(x)]||0)+1,o),{});
+
+const PAGES=[['dashboard','Dashboard'],['inventory','Tank Inventory'],['offhire','Off-Hired'],['movements','Movements'],['tracking','Live Tracking'],['cleaning','Cleaning Log'],['inspections','Inspections'],['reports','Reports & Analytics'],['users','Access'],['settings','Settings']];
+const P2={
+cleaning:['Cleaning Log','Track and manage tank cleaning records',[['Cleaning ID','UUID','Auto-generated'],['Tank No.','Foreign Key','Linked to Tank Inventory'],['Dispatch / Return Date','Date','Date picker'],['Last Cargo','String','e.g. Heptanoic Acid'],['Cleaning Type','Dropdown','Standard Wash, Chemical Clean, Steam Clean, Gas-Free'],['Cleaning Facility','String','Text input'],['Chassis Rental','Number','With currency label'],['Residue Check','Dropdown','Pass, Fail, Pending'],['Status','Derived','Based on dates and residue check']]],
+inspections:['Inspections','Schedule and track tank inspections',[['Inspection ID','UUID','Auto-generated'],['Tank No.','Foreign Key','Linked to Tank Inventory'],['Inspection Type','Dropdown','Periodic, Pre-use, Post-cleaning'],['Inspection Date','Date','Date picker'],['Inspector','String','Text input'],['Result','Dropdown','Pass, Fail, Conditional Pass'],['Next Inspection','Date','Auto-calculated'],['Notes','Text','Optional remarks']]],
+reports:['Reports & Analytics','Advanced analytics and reporting dashboards',[['Fleet Utilization Report','Report','Usage by tank, operator, period'],['Movement History Report','Report','Filtering and export'],['Cleaning Cost Report','Report','Aggregated cleaning costs per tank'],['Contract Expiry Report','Report','Upcoming renewals'],['Inspection Compliance','Report','Overdue or due tanks'],['Rental Revenue Report','Report','Daily/monthly income by currency']]]};
+
+function dashboard(){
+  const T=D.t,M=D.m,C=D.c,at=l=>T.filter(t=>t.currentLocation===l).length;
+  const avail=T.filter(t=>t.currentLocation==='24JU Plant'&&t.usedBy==='Operations').length;
+  const insp=T.filter(t=>{const d=days(t.nextInspectionDate);return d>=0&&d<=30}).length;
+  const exp=T.filter(t=>{const d=days(t.contractExpiryDate);return d>=0&&d<=60}).length;
+  
+  const sgd=T.reduce((a,t)=>a+t.rentalRate/(FX[t.rentalCurrency]||1),0);
+  const k=(l,v,s='')=>`<div class="card kpi"><small>${l}</small><b>${v}</b><span>${s}</span></div>`;
+  const fs={Available:avail,'At Plant':at('24JU Plant'),Vopak:at('Vopak'),'In Transit':at('In Transit'),Cleaning:at('Cleaning Facility'),Maintenance:at('Maintenance Depot'),'24 BC':at('24 BC'),Milkyway:at('Milkyway'),Aroma:at('Aroma')};
+  const fc={Available:'#22c55e','At Plant':'#3b82f6',Vopak:'#a855f7','In Transit':'#f97316',Cleaning:'#facc15',Maintenance:'#ef4444','24 BC':'#0d9488',Milkyway:'#ec4899',Aroma:'#84cc16'};
+  const sc={Pending:'#9ca3af','In Progress':'#3b82f6',Completed:'#22c55e',Failed:'#ef4444'};
+  const mk=l=>Object.fromEntries(MST.map(s=>[s,l.filter(x=>x.status===s).length]));
+  return `<h1>Dashboard</h1><p class="sub">Fleet overview and key performance indicators</p>
+  <div class="kpis">${k('Total tanks',T.length)}${k('Tanks in cleaning',at('Cleaning Facility'))}${k('Active movements',M.filter(m=>m.status==='In Progress').length)}${k('Upcoming inspections',insp,'Next 30 days')}${k('Contracts expiring',exp,'Next 60 days')}${k('Available at plant',avail)}${k('In maintenance',at('Maintenance Depot'))}
+  <div class="card kpi"><small>Total daily rental</small>${['SGD','USD','EUR','GBP','JPY'].map(c=>`<span style="display:block;color:var(--ink);font-weight:600">${money(sgd*FX[c],c)}</span>`).join('')}</div></div>
+  <div class="g2"><div class="card"><h2>Fleet status</h2>${bar(fs,fc)}</div><div class="card"><h2>By operator</h2>${bar(cnt(T,t=>t.tankOperator),{Trifleet:'#2563eb',Milkyway:'#0d9488',Aroma:'#c026d3'})}</div>
+  <div class="card"><h2>By user</h2>${bar(cnt(T,t=>t.usedBy),{Operations:'#2563eb','Supply Chain':'#0d9488',Veolia:'#a855f7','Total Loss':'#ef4444'})}</div>
+  <div class="card"><h2>Movements</h2>${bar(mk(M),sc)}</div><div class="card"><h2>Cleaning records</h2>${bar(mk(C.map(c=>({status:cstat(c)}))),{...sc,Pending:'#facc15'})}</div></div>`;
+}
+function inventory(){
+  let r=D.t.filter(t=>(!ui.q||(t.tankNo+t.contractNo).toLowerCase().includes(ui.q.toLowerCase()))&&(!ui.fl||t.currentLocation===ui.fl)&&(!ui.fu||t.usedBy===ui.fu)&&(!ui.fo||t.tankOperator===ui.fo));
+  r=[...r].sort((a,b)=>{const x=String(a[ui.sk]??''),y=String(b[ui.sk]??'');return ui.asc?x.localeCompare(y):y.localeCompare(x)});
+  const th=(l,k)=>`<th class="so" data-a="sort" data-k="${k}">${l}${ui.sk===k?(ui.asc?' ▲':' ▼'):''}</th>`;
+  const any=ui.q||ui.fl||ui.fu||ui.fo;
+  return `<div class="hd"><div><h1>Tank Inventory</h1><p class="sub">${r.length} of ${D.t.length} tanks</p></div><div class="tools"><button class="btn s" data-a="csv">Export CSV</button><button class="btn w" data-a="add">Add tank</button></div></div>
+  <div class="tools"><input id="q" data-f="q" type="search" placeholder="Search by Tank No. or Contract No." value="${esc(ui.q)}" style="min-width:250px" aria-label="Search">${sel('fl',LOC,ui.fl,'All Locations')}${sel('fu',USED,ui.fu,'All Used By')}${sel('fo',OPS,ui.fo,'All Operators')}${any?'<button class="btn s" data-a="clear">Clear filters</button>':''}</div>
+  <div class="tw">${r.length?`<table><thead><tr>${th('Tank No.','tankNo')}<th>Location</th>${th('Contents','currentContents')}${th('Used By','usedBy')}${th('Operator','tankOperator')}${th('Contract No.','contractNo')}${th('Expiry','contractExpiryDate')}<th>Rental Rate</th><th class="ra">Actions</th></tr></thead><tbody>
+  ${r.map(t=>`<tr class="r" data-a="view" data-id="${esc(t.tankNo)}"><td><b>${esc(t.tankNo)}</b></td><td>${pill(t.currentLocation,LC[t.currentLocation])}</td><td>${esc(t.currentContents)||'—'}</td><td>${esc(t.usedBy)}</td><td>${esc(t.tankOperator)}</td><td>${esc(t.contractNo)}</td><td>${dueCell(t.contractExpiryDate)}</td><td>${money(t.rentalRate,t.rentalCurrency)}/day</td><td class="ra w"><button class="btn s sm" data-a="edit" data-id="${esc(t.tankNo)}">Edit</button> <button class="btn s sm" data-a="ofh" data-id="${esc(t.tankNo)}">Off-hire</button> <button class="btn s sm" data-a="del" data-id="${esc(t.tankNo)}">Delete</button></td></tr>`).join('')}</tbody></table>`:'<div class="empty">No tanks match your filters. Try adjusting or clearing them.</div>'}</div>`;
+}
+function movements(){
+  const r=D.m.filter(m=>(!ui.ms||m.status===ui.ms)&&(!ui.mf||m.fromLocation===ui.mf)&&(!ui.mt||m.toLocation===ui.mt)).sort((a,b)=>new Date(b.scheduledDate)-new Date(a.scheduledDate));
+  return `<div class="hd"><div><h1>Movements</h1><p class="sub">${D.m.length} movement records</p></div><button class="btn w" data-a="madd">Log new movement</button></div>
+  <div class="tools">${sel('ms',MST,ui.ms,'All Statuses')}${sel('mf',LOC,ui.mf,'All From Locations')}${sel('mt',LOC,ui.mt,'All To Locations')}</div>
+  <div class="tw">${r.length?`<table><thead><tr><th>Tank No.</th><th>Route</th><th>Scheduled</th><th>Actual</th><th>Driver</th><th>Status</th><th class="ra">Actions</th></tr></thead><tbody>
+  ${r.map(m=>`<tr><td><b>${esc(m.tankNo)}</b></td><td>${esc(m.fromLocation)} → ${esc(m.toLocation)}</td><td>${fd(m.scheduledDate)}</td><td>${fd(m.actualDate)}</td><td>${esc(m.driver)||'—'}</td><td>${pill(m.status,SCOL[m.status])}</td><td class="ra w">${m.status==='Pending'||m.status==='In Progress'?`<button class="btn sm" data-a="adv" data-id="${m.id}">${m.status==='Pending'?'Start':'Complete'}</button> `:''}<button class="btn s sm" data-a="mdel" data-id="${m.id}">Delete</button></td></tr>`).join('')}</tbody></table>`:'<div class="empty">No movements match. Clear the filters or log a new movement.</div>'}</div>`;
+}
+function tstatus(t){const l=t.currentLocation;return l==='Cleaning Facility'?'Cleaning':l==='Maintenance Depot'?'Maintenance':l==='24JU Plant'?(t.usedBy==='Operations'?'Available':'At Plant'):l==='Customer'?'With Customer':l}
+function tracking(){
+  const r=D.t.filter(t=>(!ui.tl||t.currentLocation===ui.tl)&&(!ui.tu||t.usedBy===ui.tu));
+  const nw=D.t.reduce((a,t)=>!a||t.lastUpdated>a?t.lastUpdated:a,'');
+  return `<div class="hd"><div><h1>Live Tracking</h1><p class="sub">${nw?'Updated '+ago(nw):'No data'}</p></div><button class="btn s w" data-a="refresh">Refresh</button></div>
+  <div class="tools">${sel('tl',LOC,ui.tl,'All Locations')}${sel('tu',USED,ui.tu,'All Used By')}</div>
+  <div class="tw">${r.length?`<table><thead><tr><th>Tank No.</th><th>Current Location</th><th>Contents</th><th>Status</th><th>Tank Operator</th><th>Used By</th><th>Last Updated</th></tr></thead><tbody>${r.map(t=>`<tr><td><b>${esc(t.tankNo)}</b></td><td>${pill(t.currentLocation,LC[t.currentLocation])}</td><td>${esc(t.currentContents)||'—'}</td><td>${tstatus(t)}</td><td>${esc(t.tankOperator)}</td><td>${esc(t.usedBy)}</td><td class="mu">${ago(t.lastUpdated)}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">No tanks at this location.</div>'}</div>`;
+}
+function phase2(k){const[t,d,f]=P2[k];return `<h1>${t}</h1><p class="sub">${d}</p><div class="card empty" style="border:2px dashed var(--line);margin-bottom:16px"><div style="font-size:30px">🔒</div><h2 style="margin-top:8px">Coming in Phase 2</h2>The data model for this module is ready below.</div>
+  <div class="tw"><table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody>${f.map(x=>`<tr><td><b>${x[0]}</b></td><td>${x[1]}</td><td class="mu">${x[2]}</td></tr>`).join('')}</tbody></table></div>`}
+const CLT=['Standard Wash','Chemical Clean','Steam Clean','Gas-Free'],RES=['Pass','Fail','Pending'],ITY=['Periodic','Pre-use','Post-cleaning'],IRS=['Pass','Fail','Conditional Pass'];
+const IC={Pass:['#dcfce7','#15803d'],Fail:['#fee2e2','#b91c1c'],'Conditional Pass':['#fef3c7','#b45309']};
+function cstat(c){const t=dOff(0);if(!c.dispatchDate||c.dispatchDate>t)return'Pending';if(!c.returnDate||c.returnDate>t)return'In Progress';return c.residueCheck==='Fail'?'Failed':c.residueCheck==='Pass'?'Completed':'In Progress'}
+const cdays=c=>c.dispatchDate&&c.returnDate?Math.max(1,days(c.returnDate)-days(c.dispatchDate)):0;
+const AG=(a,f)=>a.reduce((o,x)=>{(o[f(x)]=o[f(x)]||[]).push(x);return o},{});
+const dd=s=>s?days(s):null;
+function dl(n,h,r){const q=v=>'"'+String(v).replace(/"/g,'""')+'"';const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([[h,...r].map(x=>x.map(q).join(',')).join('\n')],{type:'text/csv'}));a.download=n;a.click()}
+function cleaning(){
+  const r=D.c.filter(c=>!ui.cs||cstat(c)===ui.cs).sort((a,b)=>String(b.dispatchDate).localeCompare(String(a.dispatchDate)));
+  return `<div class="hd"><div><h1>Cleaning Log</h1><p class="sub">${D.c.length} cleaning records. Status follows the dates and the residue check.</p></div><button class="btn w" data-a="cadd">Log cleaning</button></div>
+  <div class="tools">${sel('cs',MST,ui.cs,'All Statuses')}</div>
+  <div class="tw">${r.length?`<table><thead><tr><th>Tank No.</th><th>Dispatched</th><th>Returned</th><th>Last cargo</th><th>Type</th><th>Facility</th><th>Chassis rental (flat fee)</th><th>Residue check</th><th>Status</th><th class="ra w">Actions</th></tr></thead><tbody>${r.map(c=>`<tr><td><b>${esc(c.tankNo)}</b></td><td>${fd(c.dispatchDate)}</td><td>${fd(c.returnDate)}</td><td>${esc(c.lastCargo)}</td><td>${esc(c.cleaningType)}</td><td>${esc(c.cleaningFacility)}</td><td>${c.chassisRental==null?'<span class="mu">TBC</span>':money(c.chassisRental,c.chassisCurrency)}</td><td>${canEdit()?`<select data-u="res" data-id="${c.id}" aria-label="Residue check">${RES.map(x=>`<option ${x===c.residueCheck?'selected':''}>${x}</option>`).join('')}</select>`:esc(c.residueCheck)}</td><td>${pill(cstat(c),SCOL[cstat(c)])}</td><td class="ra w"><button class="btn s sm" data-a="cdel" data-id="${c.id}">Delete</button></td></tr>`).join('')}</tbody></table>`:'<div class="empty">No cleaning records match. Log a cleaning to start tracking.</div>'}</div>`}
+function cleanForm(){dlg.innerHTML=`<h2 style="font-size:18px">Log cleaning</h2><div class="fg"><label class="full">Tank No.<select id="c_t"><option value="">Select a tank</option>${D.t.map(t=>`<option>${esc(t.tankNo)}</option>`).join('')}</select></label>${fld('Dispatch date','c_d','','date')}${fld('Return date (if known)','c_r','','date')}${fld('Last cargo','c_cg','')}<label>Cleaning type<select id="c_ty">${CLT.map(x=>`<option>${x}</option>`).join('')}</select></label>${fld('Cleaning facility','c_f','')}${fld('Chassis rental flat fee (leave blank until the depot quotes)','c_rr','','number','min="0" step="0.5"')}<label>Currency<select id="c_cu">${CUR.map(x=>`<option>${x}</option>`).join('')}</select></label><label class="full">Residue check<select id="c_re">${RES.map(x=>`<option ${x==='Pending'?'selected':''}>${x}</option>`).join('')}</select></label></div><div class="err" id="fe" role="alert"></div><div class="acts"><button class="btn s" data-a="close">Cancel</button><button class="btn" data-a="csave">Log cleaning</button></div>`;dlg.showModal()}
+function inspections(){
+  const due=D.t.map(t=>({t,d:dd(t.nextInspectionDate)})).filter(x=>x.d!==null).sort((a,b)=>a.d-b.d);
+  const h=[...D.i].sort((a,b)=>b.date.localeCompare(a.date));
+  return `<div class="hd"><div><h1>Inspections</h1><p class="sub">${due.filter(x=>x.d<0).length} overdue · ${due.filter(x=>x.d>=0&&x.d<=30).length} due within 30 days · most urgent first</p></div><button class="btn w" data-a="iadd">Record inspection</button></div>
+  <h2>Inspection schedule</h2><div class="tw" style="margin-bottom:22px">${due.length?`<table><thead><tr><th>Tank No.</th><th>Location</th><th>Contents</th><th>Next inspection</th><th>Time to inspection</th><th class="ra w">Actions</th></tr></thead><tbody>${due.map(x=>`<tr><td><b>${esc(x.t.tankNo)}</b></td><td>${pill(x.t.currentLocation,LC[x.t.currentLocation])}</td><td>${esc(x.t.currentContents)||'—'}</td><td>${fd(x.t.nextInspectionDate)}</td><td>${dueText(x.d)}</td><td class="ra w"><button class="btn sm" data-a="iadd" data-id="${esc(x.t.tankNo)}">Record</button></td></tr>`).join('')}</tbody></table>`:'<div class="empty">No active tanks to schedule.</div>'}</div>
+  <h2>Inspection history</h2><div class="tw">${h.length?`<table><thead><tr><th>Tank No.</th><th>Type</th><th>Date</th><th>Inspector</th><th>Result</th><th>Next inspection</th><th>Notes</th><th class="ra w">Actions</th></tr></thead><tbody>${h.map(i=>`<tr><td><b>${esc(i.tankNo)}</b></td><td>${esc(i.type)}</td><td>${fd(i.date)}</td><td>${esc(i.inspector)}</td><td>${pill(i.result,IC[i.result])}</td><td>${fd(i.nextDate)}</td><td style="white-space:normal;min-width:160px">${esc(i.notes)||'—'}</td><td class="ra w"><button class="btn s sm" data-a="idel" data-id="${i.id}">Delete</button></td></tr>`).join('')}</tbody></table>`:'<div class="empty">No inspections recorded yet. Record one to build the history.</div>'}</div>`}
+function inspForm(pre){dlg.innerHTML=`<h2 style="font-size:18px">Record inspection</h2><div class="fg"><label class="full">Tank No.<select id="i_t"><option value="">Select a tank</option>${D.t.map(t=>`<option ${t.tankNo===pre?'selected':''}>${esc(t.tankNo)}</option>`).join('')}</select></label><label>Inspection type<select id="i_ty">${ITY.map(x=>`<option>${x}</option>`).join('')}</select></label>${fld('Inspection date','i_d',dOff(0),'date')}${fld('Inspector','i_in','')}<label>Result<select id="i_rs">${IRS.map(x=>`<option>${x}</option>`).join('')}</select></label><label class="full">Next inspection date (leave blank to set 2.5 years after a periodic inspection)<input id="i_nx" type="date"></label><label class="full">Notes<textarea id="i_n" rows="2"></textarea></label></div><div class="err" id="fe" role="alert"></div><div class="acts"><button class="btn s" data-a="close">Cancel</button><button class="btn" data-a="isave">Save inspection</button></div>`;dlg.showModal()}
+const REP={
+ 'Fleet utilisation':()=>{const act=t=>!['Cleaning Facility','Maintenance Depot'].includes(t.currentLocation),row=(k,a)=>{const n=a.filter(act).length;return[k,a.length,n,a.length?Math.round(n/a.length*100)+'%':'—']};return{n:'Active means not in the cleaning facility or maintenance depot.',h:['Group','Tanks','Active','Utilisation'],r:[['All tanks',D.t.length,D.t.filter(act).length,D.t.length?Math.round(D.t.filter(act).length/D.t.length*100)+'%':'—'],...Object.entries(AG(D.t,t=>t.tankOperator)).map(([k,a])=>row('Operator: '+k,a)),...Object.entries(AG(D.t,t=>t.usedBy)).map(([k,a])=>row('Used by: '+k,a)),...Object.entries(AG(D.t,t=>t.currentLocation)).map(([k,a])=>row('Location: '+k,a))]}},
+ 'Movement history':()=>({n:'Movements grouped by scheduled month.',h:['Month','Pending','In Progress','Completed','Failed','Total'],r:Object.entries(AG(D.m,m=>m.scheduledDate.slice(0,7))).sort().reverse().map(([k,a])=>[k.slice(5)+'/'+k.slice(0,4),...MST.map(s=>a.filter(m=>m.status===s).length),a.length])}),
+ 'Cleaning cost':()=>({n:'Chassis rental is a flat fee per cleaning, converted to SGD. Fees not yet known are counted as pending and left out of the total.',h:['Tank','Cleanings','Fees pending','Cost (SGD)'],r:Object.entries(AG(D.c,c=>c.tankNo)).map(([k,a])=>[k,a.length,a.filter(c=>c.chassisRental==null).length,Math.round(a.reduce((s,c)=>s+(c.chassisRental||0)/(FX[c.chassisCurrency]||1),0))]).sort((a,b)=>b[3]-a[3])}),
+ 'Contract expiry':()=>({n:'Sorted by expiry date, soonest first.',h:['Tank','Contract','Operator','Expiry','Days left'],r:[...D.t].sort((a,b)=>String(a.contractExpiryDate).localeCompare(String(b.contractExpiryDate))).map(t=>{const d=dd(t.contractExpiryDate);return[t.tankNo,t.contractNo,t.tankOperator,fd(t.contractExpiryDate),d===null?'No date':d<0?'Expired '+(-d)+' days ago':d+' days']})}),
+ 'Inspection compliance':()=>({n:'Overdue, due within 30 days, or compliant.',h:['Tank','Next inspection','Status'],r:[...D.t].sort((a,b)=>String(a.nextInspectionDate).localeCompare(String(b.nextInspectionDate))).map(t=>{const d=dd(t.nextInspectionDate);return[t.tankNo,fd(t.nextInspectionDate),d===null?'No date':d<0?'Overdue':d<=30?'Due within 30 days':'Compliant']})}),
+ 'Rental revenue':()=>{const tot=D.t.reduce((a,t)=>a+t.rentalRate/(FX[t.rentalCurrency]||1),0);return{n:'Monthly is the daily total multiplied by 30.',h:['Currency','Tanks','Daily','Monthly'],r:[...CUR.map(c=>{const a=D.t.filter(t=>t.rentalCurrency===c),s=a.reduce((x,t)=>x+t.rentalRate,0);return[c,a.length,money(s,c),money(s*30,c)]}),['All, in SGD',D.t.length,money(tot,'SGD'),money(tot*30,'SGD')]]}}
+};
+function reports(){const k=REP[ui.rp]?ui.rp:Object.keys(REP)[0],x=REP[k]();
+  return `<div class="hd"><div><h1>Reports &amp; Analytics</h1><p class="sub">${esc(x.n||'')}</p></div><button class="btn s" data-a="repcsv">Export CSV</button></div>
+  <div class="tools">${Object.keys(REP).map(n=>`<button class="btn ${n===k?'':'s'}" data-a="rep" data-id="${esc(n)}">${n}</button>`).join('')}</div>
+  <div class="tw">${x.r.length?`<table><thead><tr>${x.h.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${x.r.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`:'<div class="empty">No data for this report yet.</div>'}</div>`}
+const dueText=d=>d<0?`<span class="red">${-d} day${d===-1?'':'s'} overdue</span>`:d===0?'<span class="amb">Due today</span>':`<span class="${d<=30?'amb':''}">${d} day${d===1?'':'s'} left</span>`;
+function offhire(){
+  const r=D.o.filter(o=>!ui.oq||(o.tank.tankNo+o.tank.contractNo+o.reason+(o.notes||'')).toLowerCase().includes(ui.oq.toLowerCase())).sort((a,b)=>String(b.offHireDate).localeCompare(String(a.offHireDate)));
+  return `<div class="hd"><div><h1>Off-Hired Tanks</h1><p class="sub">${D.o.length} tanks off-hired. They are kept out of the active fleet, dashboard and reports.</p></div></div>
+  <div class="tools"><input id="oq" data-f="oq" type="search" placeholder="Search tank, contract, reason or notes" value="${esc(ui.oq||'')}" style="min-width:260px" aria-label="Search off-hired tanks"></div>
+  <div class="tw">${r.length?`<table><thead><tr><th>Tank No.</th><th>Off-hire date</th><th>Reason</th><th>Last location</th><th>Last contents</th><th>Operator</th><th>Contract No.</th><th>Notes</th><th class="ra w">Actions</th></tr></thead><tbody>${r.map(o=>`<tr><td><b>${esc(o.tank.tankNo)}</b></td><td>${fd(o.offHireDate)}</td><td>${esc(o.reason)}</td><td>${esc(o.tank.currentLocation)}</td><td>${esc(o.tank.currentContents)||'—'}</td><td>${esc(o.tank.tankOperator)}</td><td>${esc(o.tank.contractNo)||'—'}</td><td style="white-space:normal;min-width:160px">${esc(o.notes)||'—'}</td><td class="ra w"><button class="btn s sm" data-a="reinst" data-id="${esc(o.tank.tankNo)}">Reinstate</button> <button class="btn s sm" data-a="odel" data-id="${esc(o.tank.tankNo)}">Delete</button></td></tr>`).join('')}</tbody></table>`:'<div class="empty">No off-hired tanks. Use Off-hire on the Tank Inventory page to move a tank here.</div>'}</div>`}
+function ofhForm(id){dlg.innerHTML=`<h2 style="font-size:18px">Off-hire ${esc(id)}</h2><p class="mu" style="margin-top:0">The tank and its movement, cleaning and inspection records move to the Off-Hired page. You can reinstate it later.</p><div class="fg">${fld('Off-hire date','o_d',dOff(0),'date')}<label>Reason<select id="o_r">${['Contract ended','Returned to lessor','Sold','Damaged / scrapped','Other'].map(x=>`<option>${x}</option>`).join('')}</select></label><label class="full">Notes<textarea id="o_n" rows="3" placeholder="Condition, handover details, anything to remember"></textarea></label></div><div class="err" id="fe" role="alert"></div><div class="acts"><button class="btn s" data-a="close">Cancel</button><button class="btn" data-a="ofhsave" data-id="${esc(id)}">Off-hire tank</button></div>`;dlg.showModal()}
+let pend=null;
+function ask(msg,ok,fn){pend=fn;dlg.innerHTML=`<h2 style="font-size:18px">Are you sure?</h2><p>${esc(msg)}</p><div class="acts"><button class="btn s" data-a="close">Cancel</button><button class="btn d" data-a="yes">${esc(ok)}</button></div>`;if(!dlg.open)dlg.showModal()}
+function note(msg){dlg.innerHTML=`<p>${esc(msg)}</p><div class="acts"><button class="btn" data-a="close">OK</button></div>`;if(!dlg.open)dlg.showModal()}
+function users(){return `<div class="hd"><div><h1>User Management</h1><p class="sub">Admins manage everything. Dispatchers edit tanks and movements. Viewers can only look.</p></div><button class="btn" data-a="u_add">Add user</button></div>
+  <div class="tw"><table><thead><tr><th>Name</th><th>Username</th><th>Role</th><th class="ra">Actions</th></tr></thead><tbody>${USERS.map(u=>`<tr><td><b>${esc(u.name)}</b></td><td>@${esc(u.username)}</td><td><select data-u="role" data-id="${esc(u.username)}" aria-label="Role for ${esc(u.username)}">${['Admin','Dispatcher','Viewer'].map(r=>`<option ${r===u.role?'selected':''}>${r}</option>`).join('')}</select></td><td class="ra"><button class="btn s sm" data-a="u_pw" data-id="${esc(u.username)}">Reset password</button> ${u.username===me?'':`<button class="btn s sm" data-a="u_del" data-id="${esc(u.username)}">Delete</button>`}</td></tr>`).join('')}</tbody></table></div>`}
+function settings(){return `<h1>Settings</h1><p class="sub">Manage your account and application data</p>
+  <div class="card" style="margin-bottom:14px"><h2>User profile</h2><b>${esc((ME()||{}).name||me)}</b><div class="mu">${esc(role())} · @${esc(me)}</div><p><button class="btn s" data-a="u_pw">Change my password</button></p></div>
+  <div class="card" style="margin-bottom:14px"><h2>Data overview</h2><div class="g2" style="grid-template-columns:repeat(3,1fr)">${[['Tanks',D.t.length],['Movements',D.m.length],['Cleaning records',D.c.length]].map(([l,v])=>`<div class="card" style="text-align:center"><b style="font-size:24px">${v}</b><div class="mu">${l}</div></div>`).join('')}</div><p class="adm"><button class="btn s" data-a="reset">Reset to seed data</button></p></div>
+  <div class="card" style="margin-bottom:14px"><h2>About</h2><div>Application: ISO Tank Manager ERP</div><div>Version: 1.0.0 (MVP)</div><div>Storage: local browser storage on this device</div></div>
+  <div class="card"><h2>Session</h2><button class="btn d" data-a="logout">Log out</button></div>`}
+
+function render(){
+  const root=$('#root');document.body.classList.toggle('ro',authed&&!canEdit());document.body.classList.toggle('na',!isAdm());
+  if(!authed||!ready){root.innerHTML=gate();return}
+  if(false){root.innerHTML=`<div id="login"><div><h1>ISO Tank Manager</h1><p class="sub" style="text-align:center;color:#94a3b8">Fleet &amp; logistics ERP</p><div class="card"><h2 style="font-size:18px">Sign in</h2><div class="fg"><label>Username<input id="u" autocomplete="username" placeholder="admin"></label><label>Password<input id="p" type="password" autocomplete="current-password" placeholder="••••••••"></label></div><div class="err" id="le" role="alert">${esc(ui.err)}</div><button class="btn" style="width:100%" data-a="login">Sign in</button></div></div></div>`;return}
+  const pg=(location.hash.slice(1)||'dashboard'),cur=PAGES.some(p=>p[0]===pg&&(pg!=='users'||isAdm()))?pg:'dashboard';
+  const body={dashboard,inventory,offhire,movements,tracking,cleaning,inspections,reports,users,settings}[cur]();
+  const af=document.activeElement,fid=af&&af.id,ss=af&&af.selectionStart;
+  root.innerHTML=`<div id="app"><aside><div class="logo"><i>🚚</i><div><b>ISO Tank</b><small>Manager ERP</small></div></div><nav>${PAGES.filter(p=>p[0]!=='users'||isAdm()).map(p=>`<a href="#${p[0]}" class="${p[0]===cur?'on':''}">${p[1]}<span>${p[2]||''}</span></a>`).join('')}</nav><div class="who"><p><b>${esc(MYNAME||'You')}</b><br>${role()}</p></div></aside><main>${banner()}${body}</main></div>`;
+  if(fid&&$('#'+fid)&&(fid==='q'||fid==='oq')){const e=$('#'+fid);e.focus();try{e.setSelectionRange(ss,ss)}catch(x){}}
+}
+window.addEventListener('hashchange',render);
+setInterval(()=>{if(authed&&location.hash==='#tracking'&&!$('#dlg').open)render()},60000);
+
+const dlg=$('#dlg');
+const fld=(l,id,v,t='text',x='')=>`<label>${l}<input id="${id}" type="${t}" value="${esc(v)}" ${x}></label>`;
+function tankForm(t){
+  const nw=!t;t=t||{tankNo:'',currentLocation:'24JU Plant',usedBy:'Operations',tankOperator:'Trifleet',contractNo:'',contractExpiryDate:'',currentContents:'',nextInspectionDate:'',rentalRate:0,rentalCurrency:'SGD',capacity:25000,levelGauge:'No',dedicatedUse:[],remarks:''};
+  const s=(l,id,o,v)=>`<label>${l}<select id="${id}">${o.map(x=>`<option ${x===v?'selected':''}>${x}</option>`).join('')}</select></label>`;
+  dlg.innerHTML=`<h2 style="font-size:18px">${nw?'Add tank':'Edit '+esc(t.tankNo)}</h2><div class="fg">${fld('Tank No.','f_no',t.tankNo,'text',nw?'placeholder="ISO-019"':'disabled')}${s('Location','f_loc',LOC,t.currentLocation)}${s('Used by','f_used',USED,t.usedBy)}${s('Operator','f_op',OPS,t.tankOperator)}${fld('Contract No.','f_ct',t.contractNo)}${fld('Contract expiry','f_ce',t.contractExpiryDate,'date')}${fld('Current contents','f_cc',t.currentContents)}${fld('Next inspection','f_ni',t.nextInspectionDate,'date')}${fld('Rental rate per day','f_rr',t.rentalRate,'number','min="0" step="0.5"')}${s('Currency','f_cur',CUR,t.rentalCurrency)}${fld('Capacity (L)','f_cap',t.capacity,'number','min="1"')}${s('Level gauge','f_lg',['Yes','No'],t.levelGauge)}
+  <div class="full"><label>Dedicated use</label><div class="chk">${DED.map(d=>`<label><input type="checkbox" name="ded" value="${d}" ${t.dedicatedUse.includes(d)?'checked':''}>${d}</label>`).join('')}</div></div><label class="full">Remarks<textarea id="f_rem" rows="3" placeholder="Anomalies or extra information">${esc(t.remarks||'')}</textarea></label></div><div class="err" id="fe" role="alert"></div>
+  <div class="acts"><button class="btn s" data-a="close">Cancel</button><button class="btn" data-a="savetank" data-id="${nw?'':esc(t.tankNo)}">Save changes</button></div>`;
+  dlg.showModal();
+}
+function detail(t){
+  const d=(l,v)=>`<div class="dr"><span>${l}</span><span>${v}</span></div>`;
+  dlg.innerHTML=`<h2 style="font-size:20px">${esc(t.tankNo)}</h2>${d('Location',pill(t.currentLocation,LC[t.currentLocation]))}${d('Used by',esc(t.usedBy))}${d('Operator',esc(t.tankOperator))}${d('Level gauge',t.levelGauge)}${d('Contract no.',esc(t.contractNo)||'—')}${d('Contract expiry',dueCell(t.contractExpiryDate))}${d('Current contents',esc(t.currentContents)||'—')}${d('Next inspection',dueCell(t.nextInspectionDate))}${d('Rental rate',money(t.rentalRate,t.rentalCurrency)+'/day')}${d('Capacity',t.capacity.toLocaleString()+' L')}${d('Dedicated use',t.dedicatedUse.map(esc).join(', ')||'—')}${d('Remarks',esc(t.remarks||'')||'—')}${d('Last updated',ago(t.lastUpdated))}
+  <div class="acts"><button class="btn s" data-a="close">Close</button><button class="btn w" data-a="edit" data-id="${esc(t.tankNo)}">Edit tank</button></div>`;dlg.showModal();
+}
+function moveForm(){
+  dlg.innerHTML=`<h2 style="font-size:18px">Log new movement</h2><div class="fg"><label class="full">Tank No.<select id="m_t"><option value="">Select a tank</option>${D.t.map(t=>`<option>${esc(t.tankNo)}</option>`).join('')}</select></label>
+  <label>From<select id="m_f">${LOC.map(l=>`<option>${l}</option>`).join('')}</select></label><label>To<select id="m_to">${LOC.map((l,i)=>`<option ${i==1?'selected':''}>${l}</option>`).join('')}</select></label>${fld('Scheduled date','m_d','','date')}${fld('Driver / transporter','m_dr','','text','placeholder="John Tan"')}<label class="full">Notes<textarea id="m_n" rows="2"></textarea></label></div><div class="err" id="fe" role="alert"></div>
+  <div class="acts"><button class="btn s" data-a="close">Cancel</button><button class="btn" data-a="savemove">Log movement</button></div>`;dlg.showModal();
+}
+function csv(){
+  const r=D.t.map(t=>({'Tank No.':t.tankNo,Location:t.currentLocation,'Used By':t.usedBy,Operator:t.tankOperator,'Contract No.':t.contractNo,'Contract Expiry':fd(t.contractExpiryDate),Contents:t.currentContents,'Next Inspection':fd(t.nextInspectionDate),'Rental Rate':t.rentalRate,Currency:t.rentalCurrency,'Capacity (L)':t.capacity,'Level Gauge':t.levelGauge,'Dedicated Use':t.dedicatedUse.join('; '),Remarks:t.remarks||''}));
+  const h=Object.keys(r[0]||{});if(!h.length)return;
+  const txt=[h.join(','),...r.map(x=>h.map(k=>'"'+String(x[k]).replace(/"/g,'""')+'"').join(','))].join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/csv'}));a.download='tank-inventory.csv';a.click();
+}
+function act(a,el){
+  const id=el.dataset.id,tk=()=>D.t.find(t=>t.tankNo===id);
+  if(['add','edit','del','savetank','madd','savemove','adv','mdel','refresh','cadd','csave','cdel','iadd','isave','idel','ofh','ofhsave','reinst','odel','import','sample'].includes(a)&&!canEdit())return;
+  if((a==='reset'||(a.startsWith('u_')&&a!=='u_pw'&&a!=='u_pwsave'))&&!isAdm())return;
+  switch(a){
+    case'login':{const u=$('#u').value.trim().toLowerCase(),p=$('#p').value;sha(p).then(h=>{const x=USERS.find(y=>y.username===u&&y.hash===h);if(x){me=u;authed=true;try{localStorage.setItem(K.a,u)}catch(e){}ui.err='';render()}else{ui.err='Invalid username or password.';$('#le').textContent=ui.err}});break}
+    case'logout':authed=false;me=null;try{localStorage.removeItem(K.a)}catch(e){}render();break;
+    case'sort':ui.asc=ui.sk===el.dataset.k?!ui.asc:true;ui.sk=el.dataset.k;render();break;
+    case'clear':Object.assign(ui,{q:'',fl:'',fu:'',fo:''});render();break;
+    case'csv':csv();break;
+    case'add':tankForm();break;
+    case'edit':dlg.close();tankForm(tk());break;
+    case'view':detail(tk());break;
+    case'del':ask('Delete tank '+id+'? Its movements, cleaning records and inspections will be deleted too. This cannot be undone.','Delete tank',()=>{D.t=D.t.filter(t=>t.tankNo!==id);D.m=D.m.filter(m=>m.tankNo!==id);D.c=D.c.filter(c=>c.tankNo!==id);D.i=D.i.filter(i=>i.tankNo!==id);saveAll();render()});break;
+    case'close':dlg.close();break;
+    case'savetank':{const no=(id||$('#f_no').value.trim().toUpperCase()),e=$('#fe');
+      if(!no){e.textContent='Enter a tank number.';return}
+      if(!id&&D.t.some(t=>t.tankNo===no)){e.textContent='That tank number already exists.';return}
+      const rate=+$('#f_rr').value,cap=+$('#f_cap').value;if(rate<0||!(cap>0)){e.textContent='Rate cannot be negative and capacity must be above zero.';return}
+      const t={tankNo:no,currentLocation:$('#f_loc').value,usedBy:$('#f_used').value,tankOperator:$('#f_op').value,contractNo:$('#f_ct').value,contractExpiryDate:$('#f_ce').value,currentContents:$('#f_cc').value,nextInspectionDate:$('#f_ni').value,rentalRate:rate,rentalCurrency:$('#f_cur').value,capacity:cap,levelGauge:$('#f_lg').value,dedicatedUse:[...dlg.querySelectorAll('[name=ded]:checked')].map(x=>x.value),remarks:$('#f_rem').value.trim(),lastUpdated:new Date().toISOString()};
+      if(id)D.t=D.t.map(x=>x.tankNo===id?t:x);else D.t.push(t);saveAll();dlg.close();render();break}
+    case'madd':moveForm();break;
+    case'savemove':{if(!$('#m_t').value||!$('#m_d').value){$('#fe').textContent='Select a tank and a scheduled date.';return}
+      if($('#m_f').value===$('#m_to').value){$('#fe').textContent='From and To locations must be different.';return}
+      D.m.unshift({id:uid(),tankNo:$('#m_t').value,fromLocation:$('#m_f').value,toLocation:$('#m_to').value,scheduledDate:$('#m_d').value,actualDate:null,status:'Pending',driver:$('#m_dr').value,notes:$('#m_n').value});saveAll();dlg.close();render();break}
+    case'adv':D.m=D.m.map(m=>m.id===id?{...m,status:m.status==='Pending'?'In Progress':'Completed',actualDate:m.status==='In Progress'?dOff(0):m.actualDate}:m);saveAll();render();break;
+    case'mdel':ask('Delete this movement record? This cannot be undone.','Delete movement',()=>{D.m=D.m.filter(m=>m.id!==id);saveAll();render()});break;
+    case'refresh':{const n=new Date().toISOString();D.t=D.t.map(t=>({...t,lastUpdated:n}));saveAll();render();break}
+    case'cadd':cleanForm();break;
+    case'csave':{const e=$('#fe'),t=$('#c_t').value,d=$('#c_d').value,r=$('#c_r').value,rr=$('#c_rr').value===''?null:+$('#c_rr').value;
+      if(!t||!d){e.textContent='Select a tank and a dispatch date.';return}
+      if(r&&r<d){e.textContent='The return date cannot be before the dispatch date.';return}
+      if(rr<0){e.textContent='Chassis rental cannot be negative.';return}
+      D.c.unshift({id:uid(),tankNo:t,dispatchDate:d,returnDate:r,lastCargo:$('#c_cg').value,cleaningType:$('#c_ty').value,cleaningFacility:$('#c_f').value,chassisRental:rr,chassisCurrency:$('#c_cu').value,residueCheck:$('#c_re').value,status:'Pending'});
+      const tt=D.t.find(x=>x.tankNo===t);if(tt&&d<=dOff(0)&&!r){tt.currentLocation='Cleaning Facility';tt.lastUpdated=new Date().toISOString()}
+      saveAll();dlg.close();render();break}
+    case'cdel':ask('Delete this cleaning record? This cannot be undone.','Delete record',()=>{D.c=D.c.filter(c=>c.id!==id);saveAll();render()});break;
+    case'iadd':inspForm(id);break;
+    case'isave':{const e=$('#fe'),t=$('#i_t').value,d=$('#i_d').value,ty=$('#i_ty').value,rs=$('#i_rs').value;let nx=$('#i_nx').value;
+      if(!t||!d||!$('#i_in').value.trim()){e.textContent='Select a tank, a date and enter the inspector.';return}
+      const tt=D.t.find(x=>x.tankNo===t);
+      if(!nx&&ty==='Periodic'&&rs!=='Fail'){const z=new Date(d);z.setMonth(z.getMonth()+30);nx=z.toISOString().slice(0,10)}
+      D.i.unshift({id:uid(),tankNo:t,type:ty,date:d,inspector:$('#i_in').value.trim(),result:rs,nextDate:nx||tt.nextInspectionDate,notes:$('#i_n').value.trim()});
+      if(rs!=='Fail'&&nx)tt.nextInspectionDate=nx;
+      if(rs==='Fail')tt.currentLocation='Maintenance Depot';
+      tt.lastUpdated=new Date().toISOString();saveAll();dlg.close();render();break}
+    case'idel':ask('Delete this inspection record? This cannot be undone.','Delete record',()=>{D.i=D.i.filter(i=>i.id!==id);saveAll();render()});break;
+    case'rep':ui.rp=id;render();break;
+    case'repcsv':{const x=REP[ui.rp]?REP[ui.rp]():REP[Object.keys(REP)[0]]();dl('report.csv',x.h,x.r);break}
+    case'ofh':ofhForm(id);break;
+    case'ofhsave':{const t=tk(),d=$('#o_d').value;if(!t)return;if(!d){$('#fe').textContent='Choose the off-hire date.';return}
+      D.o.unshift({tank:t,offHireDate:d,reason:$('#o_r').value,notes:$('#o_n').value.trim(),m:D.m.filter(x=>x.tankNo===id),c:D.c.filter(x=>x.tankNo===id),i:D.i.filter(x=>x.tankNo===id)});
+      D.t=D.t.filter(x=>x.tankNo!==id);D.m=D.m.filter(x=>x.tankNo!==id);D.c=D.c.filter(x=>x.tankNo!==id);D.i=D.i.filter(x=>x.tankNo!==id);saveAll();dlg.close();render();break}
+    case'reinst':{const o=D.o.find(x=>x.tank.tankNo===id);if(!o)return;if(D.t.some(x=>x.tankNo===id)){note('A tank with this number is already in the active fleet.');return}
+      ask('Reinstate '+id+' into the active fleet with its records?','Reinstate',()=>{D.t.push(o.tank);D.m.push(...o.m);D.c.push(...o.c);D.i.push(...o.i);D.o=D.o.filter(x=>x.tank.tankNo!==id);saveAll();render()});break}
+    case'odel':ask('Permanently delete '+id+' and all its records from the off-hired list? This cannot be undone.','Delete permanently',()=>{D.o=D.o.filter(x=>x.tank.tankNo!==id);saveAll();render()});break;
+    case'import':Object.assign(D,{t:LOCAL.t,c:LOCAL.c,m:LOCAL.m,i:LOCAL.i||[],o:LOCAL.o||[]});saveAll();render();break;
+    case'sample':Object.assign(D,{...seed(),i:[],o:[]});saveAll();render();break;
+    case'dismiss':SYNCERR='';render();break;
+    case'yes':{const f=pend;pend=null;dlg.close();if(f)f();break}
+    case'u_add':dlg.innerHTML=`<h2 style="font-size:18px">Add user</h2><div class="fg">${fld('Full name','n_name','')}${fld('Username','n_user','','text','autocomplete="off"')}<label>Role<select id="n_role"><option>Dispatcher</option><option>Viewer</option><option>Admin</option></select></label>${fld('Temporary password','n_pw','','password','autocomplete="new-password"')}</div><div class="err" id="fe" role="alert"></div><div class="acts"><button class="btn s" data-a="close">Cancel</button><button class="btn" data-a="u_save">Add user</button></div>`;dlg.showModal();break;
+    case'u_save':{const n=$('#n_name').value.trim(),u=$('#n_user').value.trim().toLowerCase(),p=$('#n_pw').value,e=$('#fe');
+      if(!n||!/^[a-z0-9_.-]{3,}$/.test(u)){e.textContent='Enter a name and a username of 3+ letters, numbers, dots or dashes.';return}
+      if(USERS.some(x=>x.username===u)){e.textContent='That username is taken.';return}
+      if(p.length<6){e.textContent='Password must be at least 6 characters.';return}
+      sha(p).then(h=>{USERS.push({username:u,name:n,role:$('#n_role').value,hash:h});sv(K.u,USERS);dlg.close();render()});break}
+    case'u_del':if(id!==me)ask('Delete user @'+id+'? They will no longer be able to log in.','Delete user',()=>{USERS=USERS.filter(x=>x.username!==id);sv(K.u,USERS);render()});break;
+    case'u_pw':{const t=id||me;if(t!==me&&!isAdm())return;dlg.innerHTML=`<h2 style="font-size:18px">${t===me?'Change my password':'Reset password for @'+esc(t)}</h2><div class="fg">${fld('New password','p_new','','password','autocomplete="new-password"')}</div><div class="err" id="fe" role="alert"></div><div class="acts"><button class="btn s" data-a="close">Cancel</button><button class="btn" data-a="u_pwsave" data-id="${esc(t)}">Save password</button></div>`;dlg.showModal();break}
+    case'u_pwsave':{const p=$('#p_new').value;if(id!==me&&!isAdm())return;if(p.length<6){$('#fe').textContent='Password must be at least 6 characters.';return}sha(p).then(h=>{const u=USERS.find(x=>x.username===id);if(u){u.hash=h;sv(K.u,USERS)}dlg.close();note('Password updated.')});break}
+    case'reset':ask('Reset all data to the sample records? Everything you entered will be lost.','Reset data',()=>{D={...seed(),i:[],o:[]};saveAll();render()});break;
+  }
+}
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;if(el.dataset.a==='view'&&e.target.closest('button'))return;act(el.dataset.a,el)});
+document.addEventListener('input',e=>{const f=e.target.dataset.f;if(f==='q'||f==='oq'){ui[f]=e.target.value;render()}});
+document.addEventListener('change',e=>{const f=e.target.dataset.f;if(f&&f!=='q'){ui[f]=e.target.value;render()}
+  if(e.target.dataset.u==='role'&&isAdm()){const u=USERS.find(x=>x.username===e.target.dataset.id),nr=e.target.value;if(u.role==='Admin'&&nr!=='Admin'&&USERS.filter(x=>x.role==='Admin').length<2){note('Keep at least one Admin.');render();return}u.role=nr;sv(K.u,USERS);render()}
+  if(e.target.dataset.u==='res'&&canEdit()){const c=D.c.find(x=>x.id===e.target.dataset.id);if(c){c.residueCheck=e.target.value;saveAll();render()}}});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!authed&&(e.target.id==='u'||e.target.id==='p'))act('login',e.target)});
+let GS='loading',LOCAL={t:[],c:[],m:[],i:[],o:[]},UC=null;
+function gate(){const m=GS==='nodb'?'This page needs a signed-in claude.ai account with access. Ask the owner to share it with you, then reload.':GS==='timeout'?'Still waiting for the shared data. Check your connection; this page keeps trying.':'Loading shared data…';return `<div id="login"><div><h1>ISO Tank Manager</h1><div class="card"><p style="margin:0">${m}</p></div></div></div>`}
+function banner(){let h='';
+  if(SYNCERR)h+=`<div class="card" style="border-color:var(--red);margin-bottom:14px" role="alert">${esc(SYNCERR)} <button class="btn s sm" data-a="dismiss">Dismiss</button></div>`;
+  if(!D.t.length&&!D.o.length&&!D.m.length&&!D.c.length&&!D.i.length&&canEdit())h+=`<div class="card" style="margin-bottom:14px"><h2>The shared database is empty</h2><p class="mu" style="margin-top:0">Import the records saved in this browser (use the computer where you entered your tanks), load sample data, or just start adding tanks.</p><button class="btn" data-a="import">Import this browser's data</button> <button class="btn s" data-a="sample">Load sample data</button></div>`;
+  return h}
+function users(){if(!DB)return `<h1>Access</h1><div class="card"><p style="margin:0">This copy runs on its own and keeps its data in this browser. It has no separate user accounts.</p></div>`;return `<h1>Access</h1><p class="sub">Who can see and change this data is set in the Share menu of this page</p><div class="card"><h2>How roles work</h2><div class="tw"><table><thead><tr><th>Role in this app</th><th>Share level to give</th><th>Can do</th></tr></thead><tbody><tr><td><b>Admin</b></td><td>Editor</td><td>Everything, and change who has access</td></tr><tr><td><b>Dispatcher</b></td><td>Contributor</td><td>Add and edit tanks, movements, cleanings, inspections and off-hires</td></tr><tr><td><b>Viewer</b></td><td>Viewer or Commenter</td><td>See everything, change nothing</td></tr></tbody></table></div><p class="mu">Add colleagues and choose their level from Share. Members of your organisation who open the link may start as Contributors, so check each person's level. Your role right now: <b>${role()}</b>.</p></div>`}
+function settings(){return `<h1>Settings</h1><p class="sub">Your account and the shared data</p>
+  <div class="card" style="margin-bottom:14px"><h2>You</h2><b>${esc(MYNAME||'Signed-in user')}</b><div class="mu">Role: ${role()}</div></div>
+  <div class="card" style="margin-bottom:14px"><h2>Shared data</h2><div class="g2" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr))">${[['Tanks',D.t.length],['Movements',D.m.length],['Cleaning records',D.c.length],['Inspections',D.i.length],['Off-hired',D.o.length]].map(([l,v])=>`<div class="card" style="text-align:center"><b style="font-size:24px">${v}</b><div class="mu">${l}</div></div>`).join('')}</div><p class="mu">${DB?'Everyone with access sees the same data. Changes appear for everyone within moments.':'This copy keeps its data in this browser only.'}</p></div>
+  <div class="card"><h2>About</h2><div>ISO Tank Manager ERP, version 2.0 (shared data)</div></div>`}
+function localMode(){ROLE='Admin';MYNAME='Local user';authed=true;ready=true;render()}
+async function boot(){
+  LOCAL=JSON.parse(JSON.stringify(D));render();
+  setTimeout(()=>{if(!ready&&GS==='loading'){GS='timeout';render()}},10000);
+  try{
+    if(typeof claude==='undefined'){localMode();return}
+    DB=await claude.use('db');UC=await claude.use('user');
+    if(!DB){GS='nodb';render();return}
+    if(UC){const[w,a,m]=await Promise.all([UC.can('data.write'),UC.canEdit(),UC.me()]);ROLE=a?'Admin':w===false?'Viewer':'Dispatcher';MYNAME=m.name||''}
+    authed=true;
+    for(const k of Object.keys(COLL)){DB.collection(COLL[k]).onSnapshot(s=>{D[k]=s.docs.map(d=>JSON.parse(JSON.stringify(d.data())));R[k]={};D[k].forEach(x=>{R[k][KEY[k](x)]=sj(x)});loaded[k]=true;ready=Object.keys(COLL).every(z=>loaded[z]);render()},e=>{SYNCERR='Lost the connection to the shared data ('+((e&&e.code)||'error')+'). Reload the page.';render()})}
+  }catch(e){GS='nodb';render()}
+}
+boot();
+</script>
+</body>
+</html>
